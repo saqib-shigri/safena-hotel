@@ -1,0 +1,1536 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Safena Hotel | Skardu - Official Website</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/image/logo-removebg-preview.png">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: #f8f6f2;
+            color: #1a1a1a;
+            overflow-x: hidden;
+        }
+
+        #canvas-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+            background: linear-gradient(135deg, #1a2a3a 0%, #0d1b2a 100%);
+            opacity: 0.15;
+        }
+
+        .content {
+            position: relative;
+            z-index: 2;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes bounceIn {
+            0% { opacity: 0; transform: scale(0.3); }
+            50% { opacity: 1; transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes float {
+            0%,100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes glowPulse {
+            0% { box-shadow: 0 0 0 0 rgba(198, 164, 63, 0.4); }
+            70% { box-shadow: 0 0 0 15px rgba(198, 164, 63, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(198, 164, 63, 0); }
+        }
+
+        @keyframes marqueeScroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        .float-animation {
+            animation: float 4s ease-in-out infinite;
+        }
+
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            background: transparent;
+            backdrop-filter: blur(5px);
+            border-bottom: none;
+            padding: 0.8rem 2rem;
+            transition: transform 0.5s ease-in-out, background 0.3s;
+            transform: translateY(0);
+        }
+
+        .navbar.hide {
+            transform: translateY(-100%);
+        }
+
+        .navbar.scrolled {
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(12px);
+            padding: 0.5rem 2rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+        }
+
+        .navbar.scrolled .nav-links a {
+            color: #fff;
+        }
+
+        .navbar.scrolled .logo-text {
+            color: #fff;
+        }
+
+        .nav-container {
+            max-width: 1300px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .logo-img {
+            width: 56px;
+            height: 50px;
+            object-fit: contain;
+            background: transparent;
+        }
+        
+        .logo-text {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .logo-text span {
+            color: #e4ab02;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: 0.3s;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #e4ab02;
+            transition: width 0.3s;
+        }
+
+        .nav-links a:hover::after,
+        .nav-links a.active::after {
+            width: 100%;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: #e4ab02;
+        }
+
+        .mobile-menu {
+            display: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #fff;
+        }
+
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 1.5rem 2rem;
+        }
+
+        .hero {
+            min-height: 100vh;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            flex-direction: column;
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.4)), url('https://lh3.googleusercontent.com/gps-cs-s/APNQkAEEhix8Fz3vyUp69oOx8UsYf5-uAuMnO_XNgCuQl-M00eqHg0N-Ho3sRJ1a588c5YYYgJfNJIP3AGYXZApu28hGXyQPwXLAnGXAusfxuEeDsL2o9ryVeH5gvFck1NPmghrRLgo4');
+            background-size: cover;
+            background-position: center 30%;
+            background-repeat: no-repeat;
+            margin-bottom: 2rem;
+        }
+
+        .hero h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 5rem;
+            font-weight: 700;
+            color: white;
+            animation: fadeInDown 0.8s ease-out;
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin-top: 0.5rem;
+            animation: fadeInUp 1.0s ease-out 0.1s both;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .hero-btn {
+            padding: 14px 35px;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: 0.3s;
+            animation: bounceIn 1s ease-out 0.5s both;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1rem;
+            cursor: pointer;
+            border: none;
+        }
+
+        .hero-btn-primary {
+            background: #e4ab02;
+            color: #1a1a1a;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .hero-btn-primary:hover {
+            transform: scale(1.05);
+            background: #f5c542;
+        }
+
+        .hero-btn-secondary {
+            background: transparent;
+            color: white;
+            border: 2px solid #e4ab02;
+        }
+
+        .hero-btn-secondary:hover {
+            background: #e4ab02;
+            color: #1a1a1a;
+            transform: scale(1.05);
+        }
+
+        @media (max-width: 480px) {
+            .hero-buttons {
+                flex-direction: column;
+                gap: 1rem;
+                width: 80%;
+                margin-left: auto;
+                margin-right: auto;
+            }
+            .hero h1 {
+                font-size: 2rem;
+            }
+        }
+
+        .section-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin: 3rem 0 2rem 0;
+            border-left: 4px solid #e4ab02;
+            padding-left: 1.2rem;
+            color: #1a1a1a;
+        }
+
+        .popup-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .popup-modal.active {
+            display: flex;
+            animation: fadeInUp 0.3s ease;
+        }
+
+        .popup-content {
+            background: white;
+            max-width: 550px;
+            width: 90%;
+            border-radius: 28px;
+            padding: 2rem;
+            position: relative;
+            animation: scaleIn 0.3s ease;
+        }
+
+        .popup-close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 2rem;
+            cursor: pointer;
+            color: #888;
+            transition: 0.3s;
+        }
+
+        .popup-close:hover {
+            color: #e4ab02;
+            transform: rotate(90deg);
+        }
+
+        .popup-content h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.8rem;
+            color: #e4ab02;
+            margin-bottom: 1.5rem;
+        }
+
+        .popup-field {
+            margin-bottom: 1rem;
+        }
+
+        .popup-field label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #888;
+            display: block;
+        }
+
+        .popup-field input,
+        .popup-field select {
+            width: 100%;
+            padding: 14px 18px;
+            border-radius: 12px;
+            border: 1px solid #e0e0e0;
+            background: #fafafa;
+            transition: all 0.3s;
+        }
+
+        .popup-field input:focus,
+        .popup-field select:focus {
+            border-color: #e4ab02;
+            outline: none;
+            transform: scale(1.02);
+        }
+
+        .popup-btn {
+            background: #e4ab02;
+            color: #1a1a1a;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: 0.3s;
+            margin-top: 1rem;
+        }
+
+        .popup-btn:hover {
+            background: #1a1a1a;
+            color: white;
+            transform: scale(1.02);
+        }
+
+        @keyframes scaleIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .hotel-gallery {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.8rem;
+            margin: 2rem 0;
+        }
+
+        .gallery-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.5s;
+            opacity: 0;
+            transform: translateY(30px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        .gallery-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .gallery-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+        }
+
+        .gallery-img {
+            width: 100%;
+            height: 220px;
+            overflow: hidden;
+        }
+
+        .gallery-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+
+        .gallery-card:hover .gallery-img img {
+            transform: scale(1.05);
+        }
+
+        .gallery-card .info {
+            padding: 1rem;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .rooms-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+            margin-top: 1.5rem;
+        }
+
+        .room-card {
+            background: white;
+            border-radius: 24px;
+            overflow: hidden;
+            transition: all 0.5s;
+            opacity: 0;
+            transform: translateY(30px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        .room-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .room-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+        }
+
+        .room-img {
+            width: 100%;
+            height: 200px;
+            overflow: hidden;
+        }
+
+        .room-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+
+        .room-card:hover .room-img img {
+            transform: scale(1.05);
+        }
+
+        .room-info {
+            padding: 1.5rem;
+        }
+
+        .facilities-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.8rem;
+            margin: 2rem 0;
+        }
+
+        .facility-item {
+            background: white;
+            border-radius: 20px;
+            padding: 1.8rem;
+            text-align: center;
+            transition: all 0.4s;
+            opacity: 0;
+            transform: scale(0.9);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        .facility-item.visible {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .facility-item:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+
+        .facility-item i {
+            font-size: 2.5rem;
+            color: #e4ab02;
+            margin-bottom: 1rem;
+            transition: all 0.4s;
+        }
+
+        .facility-item:hover i {
+            transform: scale(1.1);
+        }
+
+        @media (max-width: 768px) {
+            .facilities-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1rem;
+            }
+        }
+
+        @media (max-width: 550px) {
+            .facilities-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1rem;
+            }
+        }
+
+        .menu-section {
+            margin: 4rem 0;
+        }
+
+        .menu-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.8rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .menu-tab-btn {
+            padding: 12px 28px;
+            background: transparent;
+            border: 2px solid #e4ab02;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: #1a1a1a;
+        }
+
+        .menu-tab-btn:hover,
+        .menu-tab-btn.active {
+            background: #e4ab02;
+            color: #1a1a1a;
+            transform: translateY(-2px);
+        }
+
+        .menu-tab-content {
+            display: none;
+            animation: fadeInUp 0.4s ease;
+        }
+
+        .menu-tab-content.active {
+            display: block;
+        }
+
+        .menu-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .menu-header h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2rem;
+            color: #e4ab02;
+            margin-bottom: 0.5rem;
+        }
+
+        .menu-time {
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        .menu-items {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .menu-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.8rem 1.2rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            transition: all 0.3s;
+        }
+
+        .menu-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .item-name {
+            font-weight: 500;
+            color: #333;
+        }
+
+        .item-price {
+            font-weight: 700;
+            color: #e4ab02;
+            background: #e4ab0220;
+            padding: 4px 12px;
+            border-radius: 30px;
+        }
+
+        @media (max-width: 700px) {
+            .menu-tab-btn {
+                padding: 8px 16px;
+                font-size: 0.7rem;
+            }
+            .menu-items {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .about-section-new {
+            background: white;
+            border-radius: 32px;
+            padding: 2.5rem;
+            margin: 3rem 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            transition: all 0.4s;
+        }
+
+        .about-section-new:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        .about-section-new p {
+            font-size: 1rem;
+            line-height: 1.8;
+            color: #444;
+            margin-bottom: 1rem;
+        }
+
+        /* ========== ATTRACTIONS - Mobile par Marquee with HOVER STOP ========== */
+        .nearby-section {
+            background: #f0ede6;
+            border-radius: 48px;
+            margin: 3rem 0;
+            padding: 2rem;
+        }
+
+        .attractions-wrapper {
+            overflow: hidden;
+            white-space: nowrap;
+            position: relative;
+        }
+
+        .attractions-marquee {
+            display: inline-block;
+            white-space: nowrap;
+            animation: marqueeScroll 25s linear infinite;
+        }
+
+        /* Hover par marquee stop - Desktop */
+        .attractions-marquee:hover {
+            animation-play-state: paused;
+            cursor: pointer;
+        }
+
+        /* Touch devices ke liye (mobile) */
+        @media (hover: hover) {
+            .attractions-marquee:hover {
+                animation-play-state: paused;
+            }
+        }
+
+        @media (hover: none) {
+            .attractions-marquee:active {
+                animation-play-state: paused;
+            }
+        }
+
+        .attractions-marquee .attraction-card {
+            display: inline-block;
+            white-space: normal;
+            vertical-align: top;
+            margin-right: 1.5rem;
+            width: 280px;
+            background: white;
+            border-radius: 28px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s;
+        }
+
+        .attractions-marquee .attraction-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .attraction-img {
+            width: 100%;
+            height: 180px;
+            overflow: hidden;
+        }
+
+        .attraction-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+
+        .attractions-marquee .attraction-card:hover .attraction-img img {
+            transform: scale(1.05);
+        }
+
+        .attraction-info {
+            padding: 1rem;
+        }
+
+        .attraction-info h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .distance-badge {
+            display: inline-block;
+            background: #e4ab0220;
+            color: #e4ab02;
+            padding: 4px 12px;
+            border-radius: 50px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            margin-top: 0.5rem;
+        }
+
+        /* Desktop par normal grid */
+        @media (min-width: 769px) {
+            .attractions-marquee {
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+                gap: 2rem;
+                animation: none;
+                white-space: normal;
+            }
+            .attractions-marquee .attraction-card {
+                width: auto;
+                margin-right: 0;
+            }
+            .attractions-wrapper {
+                overflow: visible;
+                white-space: normal;
+            }
+        }
+
+        .reviews-section {
+            background: linear-gradient(135deg, #1a1a1a, #2c2c2c);
+            border-radius: 60px;
+            margin: 3rem 0;
+            padding: 2rem;
+            overflow: hidden;
+        }
+
+        .reviews-section .section-title {
+            color: white;
+            border-left-color: #e4ab02;
+            margin-top: 0;
+        }
+
+        .marquee-container {
+            overflow: hidden;
+            white-space: nowrap;
+            width: 100%;
+            padding: 1rem 0;
+        }
+
+        .marquee-content {
+            display: inline-block;
+            animation: marqueeScroll 30s linear infinite;
+            white-space: nowrap;
+        }
+
+        .marquee-content:hover {
+            animation-play-state: paused;
+        }
+
+        .review-card-marquee {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 40px;
+            padding: 1.2rem 2rem;
+            margin: 0 1rem;
+            min-width: 320px;
+            white-space: normal;
+            vertical-align: middle;
+            transition: all 0.3s;
+            border: 1px solid rgba(228, 171, 2, 0.3);
+        }
+
+        .review-card-marquee:hover {
+            transform: scale(1.02);
+            border-color: #e4ab02;
+        }
+
+        .review-stars {
+            color: #e4ab02;
+            margin-bottom: 0.5rem;
+        }
+
+        .review-text {
+            color: white;
+            font-size: 0.9rem;
+            line-height: 1.4;
+            max-width: 350px;
+            white-space: normal;
+        }
+
+        .review-author {
+            color: #e4ab02;
+            font-weight: 600;
+            margin-top: 0.5rem;
+        }
+
+        .contact-main {
+            margin: 2rem 0;
+        }
+
+        .contact-two-columns {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .contact-info-card,
+        .contact-form-card {
+            flex: 1;
+            background: white;
+            border-radius: 28px;
+            padding: 2rem;
+            transition: all 0.4s;
+            opacity: 0;
+            transform: translateX(-30px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        .contact-info-card.visible,
+        .contact-form-card.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .contact-info-card:hover,
+        .contact-form-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+
+        .contact-detail-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            transition: all 0.3s;
+        }
+
+        .contact-detail-item:hover {
+            transform: translateX(5px);
+        }
+
+        .contact-detail-item i {
+            width: 45px;
+            height: 45px;
+            background: #f5f0e8;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.3s;
+            color: #e4ab02;
+        }
+
+        .contact-detail-item:hover i {
+            background: #e4ab02;
+            color: white;
+        }
+
+        .contact-form-card input,
+        .contact-form-card textarea {
+            width: 100%;
+            padding: 14px 18px;
+            border-radius: 12px;
+            border: 1px solid #e0e0e0;
+            background: #fafafa;
+            margin-bottom: 1rem;
+            transition: 0.3s;
+        }
+
+        .contact-form-card input:focus,
+        .contact-form-card textarea:focus {
+            border-color: #e4ab02;
+            outline: none;
+        }
+
+        .submit-contact {
+            background: #1a1a1a;
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: 0.3s;
+        }
+
+        .submit-contact:hover {
+            background: #e4ab02;
+            transform: scale(1.02);
+        }
+
+        .map-wrapper {
+            margin-top: 2rem;
+            border-radius: 28px;
+            overflow: hidden;
+            transition: 0.4s;
+            opacity: 0;
+            transform: scale(0.95);
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .map-wrapper.visible {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .map-wrapper iframe {
+            width: 100%;
+            height: 350px;
+            border: none;
+        }
+
+        .whatsapp-float {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            background: #25D366;
+            width: 65px;
+            height: 65px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 99;
+            cursor: pointer;
+            transition: all 0.3s;
+            animation: glowPulse 2s infinite;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .whatsapp-float:hover {
+            transform: scale(1.1);
+        }
+
+        footer {
+            background: #1a1a1a;
+            color: #aaa;
+            margin-top: 3rem;
+            padding: 3rem 2rem 2rem;
+        }
+
+        .footer-inner {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 2rem;
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+
+        .footer-column {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .footer-column h4 {
+            color: #e4ab02;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.3rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .footer-column p, .footer-column a {
+            color: #aaa;
+            font-size: 0.85rem;
+            line-height: 1.8;
+            text-decoration: none;
+            display: block;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+
+        .footer-column a:hover {
+            color: #e4ab02;
+            transform: translateX(5px);
+        }
+
+        .footer-column i {
+            margin-right: 8px;
+            width: 20px;
+            color: #e4ab02;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .social-links a {
+            width: 38px;
+            height: 38px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.3s;
+        }
+
+        .social-links a:hover {
+            background: #e4ab02;
+            transform: translateY(-3px);
+        }
+
+        .social-links a:hover i {
+            color: #1a1a1a;
+        }
+
+        .social-links i {
+            margin: 0;
+            font-size: 1.2rem;
+        }
+
+        .footer-logo-img {
+            width: 56px;
+            height: 50px;
+            object-fit: contain;
+            background: transparent;
+        }
+
+        .footer-logo-area {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 1rem;
+        }
+
+        .footer-logo-text {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .footer-logo-text span {
+            color: #e4ab02;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            margin-top: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            font-size: 0.75rem;
+        }
+
+        .modal-popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-popup.active {
+            display: flex;
+            animation: fadeInUp 0.3s ease;
+        }
+
+        .modal-content {
+            background: white;
+            max-width: 700px;
+            width: 90%;
+            max-height: 85vh;
+            border-radius: 28px;
+            padding: 2rem;
+            position: relative;
+            overflow-y: auto;
+            animation: scaleIn 0.3s ease;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 2rem;
+            cursor: pointer;
+            color: #888;
+            transition: 0.3s;
+        }
+
+        .modal-close:hover {
+            color: #e4ab02;
+            transform: rotate(90deg);
+        }
+
+        .modal-content h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.8rem;
+            color: #e4ab02;
+            margin-bottom: 1.5rem;
+        }
+
+        @media (max-width: 800px) {
+            .nav-links {
+                display: none;
+                width: 100%;
+                flex-direction: column;
+                align-items: center;
+                padding: 1.5rem 0;
+                gap: 1rem;
+            }
+            .nav-links.show {
+                display: flex;
+            }
+            .mobile-menu {
+                display: block;
+            }
+            .navbar {
+                padding: 0.5rem 1rem;
+            }
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            .hero {
+                min-height: 80vh;
+            }
+            .hotel-gallery {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 550px) {
+            .hotel-gallery,
+            .rooms-grid {
+                grid-template-columns: 1fr;
+            }
+            .hero h1 {
+                font-size: 2rem;
+            }
+            .section-title {
+                font-size: 1.6rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="canvas-container"></div>
+    <div class="content">
+        <nav class="navbar" id="navbar">
+            <div class="nav-container">
+                <div class="logo-area">
+                    <img src="/image/logo-removebg-preview.png" 
+                         class="logo-img float-animation" 
+                         alt="Safena Hotel Logo"
+                         onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="logo-text">SAFENA <span>HOTEL</span></div>
+                </div>
+                <div class="mobile-menu" id="mobileMenu"><i class="fas fa-bars"></i></div>
+                <div class="nav-links" id="navLinks">
+                    <a href="#home">HOME</a>
+                    <a href="#hotel-gallery">GALLERY</a>
+                    <a href="#rooms">ROOMS</a>
+                    <a href="#facilities">FACILITIES</a>
+                    <a href="#menu-section">MENU</a>
+                    <a href="#about">ABOUT</a>
+                    <a href="#contact">CONTACT</a>
+                </div>
+            </div>
+        </nav>
+
+        <div class="hero" id="home">
+            <h1><span>Welcome to</span><br>Safena Hotel Skardu</h1>
+            <p>Experience the perfect blend of comfort, elegance, and warm Balti hospitality in the heart of Skardu Valley.</p>
+            <div class="hero-buttons">
+                <button class="hero-btn hero-btn-primary" id="showAvailabilityBtn"><i class="fas fa-calendar-check"></i> Check Availability</button>
+                <button class="hero-btn hero-btn-secondary" id="showBookingBtn"><i class="fas fa-bed"></i> Book Now</button>
+            </div>
+        </div>
+
+        <div class="container">
+            <section id="hotel-gallery">
+                <h2 class="section-title">Hotel Gallery</h2>
+                <div class="hotel-gallery" id="hotelGallery"></div>
+            </section>
+
+            <section id="rooms">
+                <h2 class="section-title">Our Premium Rooms</h2>
+                <div class="rooms-grid" id="roomsGrid"></div>
+            </section>
+
+            <section id="facilities">
+                <h2 class="section-title">Hotel Facilities</h2>
+                <div class="facilities-grid" id="facilitiesGrid"></div>
+            </section>
+
+            <section id="menu-section" class="menu-section">
+                <h2 class="section-title">🍽️ Our Restaurant Menu</h2>
+                <div class="menu-tabs">
+                    <button class="menu-tab-btn active" data-tab="breakfast">Breakfast</button>
+                    <button class="menu-tab-btn" data-tab="starters">Starters</button>
+                    <button class="menu-tab-btn" data-tab="pakistani">Pakistani Dishes</button>
+                    <button class="menu-tab-btn" data-tab="oriental">Oriental Dishes</button>
+                    <button class="menu-tab-btn" data-tab="extras">Extras</button>
+                    <button class="menu-tab-btn" data-tab="special">Special Orders</button>
+                    <button class="menu-tab-btn" data-tab="desserts">Desserts</button>
+                    <button class="menu-tab-btn" data-tab="drinks">Drinks</button>
+                </div>
+                <div class="menu-tab-content active" id="tab-breakfast">
+                    <div class="menu-header"><h3><i class="fas fa-mug-hot"></i> Breakfast</h3><p class="menu-time">Served from 7:00 AM - 11:30 AM</p></div>
+                    <div class="menu-items"><div class="menu-item"><span class="item-name">Paratha</span><span class="item-price">$5.00</span></div><div class="menu-item"><span class="item-name">Aloo Paratha</span><span class="item-price">$7.00</span></div><div class="menu-item"><span class="item-name">Egg Fry</span><span class="item-price">$6.50</span></div><div class="menu-item"><span class="item-name">Omelette</span><span class="item-price">$4.00</span></div><div class="menu-item"><span class="item-name">Boiled Egg</span><span class="item-price">$5.50</span></div><div class="menu-item"><span class="item-name">French Toast</span><span class="item-price">$5.00</span></div><div class="menu-item"><span class="item-name">Toast (4 Pc)</span><span class="item-price">$7.00</span></div><div class="menu-item"><span class="item-name">Lahori Channay</span><span class="item-price">$6.50</span></div><div class="menu-item"><span class="item-name">Aloo Bhujia</span><span class="item-price">$4.00</span></div><div class="menu-item"><span class="item-name">Aloo Tikki</span><span class="item-price">$5.50</span></div></div>
+                </div>
+                <div class="menu-tab-content" id="tab-starters">
+                    <div class="menu-header"><h3><i class="fas fa-utensils"></i> Starters</h3></div>
+                    <div class="menu-items"><div class="menu-item"><span class="item-name">French Fries</span><span class="item-price">$5.00</span></div><div class="menu-item"><span class="item-name">Pakoray</span><span class="item-price">$7.00</span></div><div class="menu-item"><span class="item-name">Chicken Boti</span><span class="item-price">$5.00</span></div><div class="menu-item"><span class="item-name">Malai Boti</span><span class="item-price">$7.00</span></div><div class="menu-item"><span class="item-name">Seekh Kebab</span><span class="item-price">$5.00</span></div><div class="menu-item"><span class="item-name">Chicken Roast</span><span class="item-price">$7.00</span></div><div class="menu-item"><span class="item-name">Chicken and Corn Soup</span><span class="item-price">$5.00</span></div><div class="menu-item"><span class="item-name">Hot and Sour Soup</span><span class="item-price">$7.00</span></div><div class="menu-item"><span class="item-name">Special Soup</span><span class="item-price">$5.00</span></div><div class="menu-item"><span class="item-name">Vegetable Soup</span><span class="item-price">$7.00</span></div></div>
+                </div>
+                <div class="menu-tab-content" id="tab-pakistani">
+                    <div class="menu-header"><h3><i class="fas fa-drumstick-bite"></i> Pakistani Dishes</h3></div>
+                    <div class="menu-items"><div class="menu-item"><span class="item-name">Chicken Karahi</span><span class="item-price">$5.00</span></div><div class="menu-item"><span class="item-name">Afghani Murgh</span><span class="item-price">$7.00</span></div><div class="menu-item"><span class="item-name">Chicken Handi</span><span class="item-price">$6.50</span></div><div class="menu-item"><span class="item-name">Murgh Saag</span><span class="item-price">$4.00</span></div><div class="menu-item"><span class="item-name">Chicken Jalfrezi</span><span class="item-price">$5.50</span></div><div class="menu-item"><span class="item-name">Charsi Karahi</span><span class="item-price">$6.50</span></div><div class="menu-item"><span class="item-name">Daal Mash</span><span class="item-price">$6.50</span></div><div class="menu-item"><span class="item-name">Daal Chawal</span><span class="item-price">$5.00</span></div><div class="menu-item"><span class="item-name">Mixed Sabzi</span><span class="item-price">$7.00</span></div><div class="menu-item"><span class="item-name">Aloo Palak</span><span class="item-price">$6.50</span></div></div>
+                </div>
+                <div class="menu-tab-content" id="tab-oriental">
+                    <div class="menu-header"><h3><i class="fas fa-chopsticks"></i> Oriental Dishes</h3></div>
+                    <div class="menu-items"><div class="menu-item"><span class="item-name">Chicken Chowmein</span><span class="item-price">$5.00</span></div><div class="menu-item"><span class="item-name">Chicken Manchurian</span><span class="item-price">$7.00</span></div><div class="menu-item"><span class="item-name">Chicken Shashlik</span><span class="item-price">$5.00</span></div><div class="menu-item"><span class="item-name">Chicken Black Pepper</span><span class="item-price">$7.00</span></div><div class="menu-item"><span class="item-name">Egg Fried Rice</span><span class="item-price">$5.00</span></div><div class="menu-item"><span class="item-name">Boiled Rice</span><span class="item-price">$7.00</span></div><div class="menu-item"><span class="item-name">Chicken Egg Fried Rice</span><span class="item-price">$5.00</span></div></div>
+                </div>
+                <div class="menu-tab-content" id="tab-extras">
+                    <div class="menu-header"><h3><i class="fas fa-plus-circle"></i> Extras</h3></div>
+                    <div class="menu-items"><div class="menu-item"><span class="item-name">Roti</span><span class="item-price">$5.00</span></div><div class="menu-item"><span class="item-name">Chappati</span><span class="item-price">$7.00</span></div><div class="menu-item"><span class="item-name">Boiled Rice</span><span class="item-price">$5.00</span></div><div class="menu-item"><span class="item-name">Kachumbar Salad</span><span class="item-price">$7.00</span></div><div class="menu-item"><span class="item-name">Green Salad</span><span class="item-price">$5.00</span></div><div class="menu-item"><span class="item-name">Raita</span><span class="item-price">$7.00</span></div></div>
+                </div>
+                <div class="menu-tab-content" id="tab-special">
+                    <div class="menu-header"><h3><i class="fas fa-star"></i> Special Orders</h3></div>
+                    <div class="menu-items"><div class="menu-item"><span class="item-name">Grilled Trout Fish</span><span class="item-price">$5.00</span></div><div class="menu-item"><span class="item-name">Mutton Karahi</span><span class="item-price">$7.00</span></div><div class="menu-item"><span class="item-name">Beef Korhaje</span><span class="item-price">$6.50</span></div><div class="menu-item"><span class="item-name">Mutton Biryani</span><span class="item-price">$4.00</span></div><div class="menu-item"><span class="item-name">Beef Pilau</span><span class="item-price">$5.50</span></div></div>
+                </div>
+                <div class="menu-tab-content" id="tab-desserts">
+                    <div class="menu-header"><h3><i class="fas fa-cake-candles"></i> Desserts</h3></div>
+                    <div class="menu-items"><div class="menu-item"><span class="item-name">Kheer</span><span class="item-price">$5.00</span></div><div class="menu-item"><span class="item-name">Custard</span><span class="item-price">$7.00</span></div><div class="menu-item"><span class="item-name">Shahi Tukray</span><span class="item-price">$5.00</span></div></div>
+                </div>
+                <div class="menu-tab-content" id="tab-drinks">
+                    <div class="menu-header"><h3><i class="fas fa-glass-cheers"></i> Drinks</h3></div>
+                    <div class="menu-items"><div class="menu-item"><span class="item-name">Mineral Water (Large)</span><span class="item-price">$5.00</span></div><div class="menu-item"><span class="item-name">Mineral Water (Small)</span><span class="item-price">$5.00</span></div><div class="menu-item"><span class="item-name">Green Tea</span><span class="item-price">$5.00</span></div><div class="menu-item"><span class="item-name">English Tea</span><span class="item-price">$7.00</span></div><div class="menu-item"><span class="item-name">Doodh Pathi</span><span class="item-price">$5.00</span></div><div class="menu-item"><span class="item-name">Black Coffee</span><span class="item-price">$7.00</span></div><div class="menu-item"><span class="item-name">Soft Drink Can</span><span class="item-price">$5.00</span></div><div class="menu-item"><span class="item-name">Milkshake (Seasonal)</span><span class="item-price">$5.00</span></div><div class="menu-item"><span class="item-name">Soft Drink (1.5 Litre)</span><span class="item-price">$7.00</span></div></div>
+                </div>
+            </section>
+
+            <section id="about">
+                <h2 class="section-title">About Safena Hotel</h2>
+                <div class="about-section-new">
+                    <p>Nestled in the heart of <strong>Skardu Valley, Safena Hotel</strong> offers a perfect blend of comfort, elegance, and warm Balti hospitality. With a stellar 4.7 rating from 57+ reviews, we take pride in providing an unforgettable stay experience. Overlooking the majestic Karakoram Range, we offer modern amenities, delicious cuisine, and breathtaking mountain views.</p>
+                    <p>Conveniently located in Skardu city center, we are your gateway to the stunning landscapes of Gilgit-Baltistan. Whether you're here for adventure or relaxation, Safena Hotel ensures a memorable stay.</p>
+                </div>
+            </section>
+
+            <section id="nearby-attractions" class="nearby-section">
+                <h2 class="section-title">📍 Nearby Attractions (Top 10 Places)</h2>
+                <div class="attractions-wrapper">
+                    <div class="attractions-marquee" id="attractionsGrid"></div>
+                </div>
+            </section>
+
+            <section id="reviews" class="reviews-section">
+                <h2 class="section-title">⭐ What Our Guests Say (4.7 ★ - 57+ Reviews)</h2>
+                <div class="marquee-container">
+                    <div class="marquee-content" id="reviewsMarquee">
+                        <div class="review-card-marquee"><div class="review-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><div class="review-text">"Excellent service and clean rooms! The staff was very friendly."</div><div class="review-author">— Muhammad Ali</div></div>
+                        <div class="review-card-marquee"><div class="review-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><div class="review-text">"Best location in Skardu! Spacious rooms and delicious food."</div><div class="review-author">— Ayesha Khan</div></div>
+                        <div class="review-card-marquee"><div class="review-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><div class="review-text">"Great value for money. Spectacular mountain views!"</div><div class="review-author">— Imran Shah</div></div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="contact">
+                <h2 class="section-title">Get in Touch</h2>
+                <div class="contact-main">
+                    <div class="contact-two-columns">
+                        <div class="contact-info-card">
+                            <h3><i class="fas fa-map-pin"></i> Contact Information</h3>
+                            <div class="contact-detail-item"><i class="fas fa-map-marker-alt"></i><p><strong>Address</strong><br>9G36+86, Skardu, Gilgit-Baltistan</p></div>
+                            <div class="contact-detail-item"><i class="fas fa-phone-alt"></i><p><strong>Phone</strong><br><strong style="color:#e4ab02">0310 3547277</strong></p></div>
+                            <div class="contact-detail-item"><i class="fas fa-envelope"></i><p><strong>Email</strong><br>info@safenahotel.com</p></div>
+                            <div class="contact-detail-item"><i class="fas fa-globe"></i><p><strong>Website</strong><br>www.safenahotel.com</p></div>
+                            <div class="contact-detail-item"><i class="fas fa-clock"></i><p><strong>Check-in / Check-out</strong><br>3:00 PM / 11:00 AM</p></div>
+                            <div class="contact-detail-item"><i class="fab fa-whatsapp"></i><p><strong>WhatsApp</strong><br><a href="https://wa.me/923103547277" style="color:#e4ab02">0310 3547277</a></p></div>
+                        </div>
+                        <div class="contact-form-card">
+                            <h3><i class="fas fa-paper-plane"></i> Send us a Message</h3>
+                            <form id="emailContactForm"><input type="text" id="contactName" placeholder="Your Name" required><input type="email" id="contactEmail" placeholder="Email" required><input type="text" id="contactSubject" placeholder="Subject"><textarea id="contactMessage" placeholder="Your Message..." required></textarea><button type="submit" class="submit-contact"><i class="fab fa-whatsapp"></i> Send Message</button></form>
+                        </div>
+                    </div>
+                    <div class="map-wrapper"><iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d3253.5340082700877!2d75.5105118!3d35.3533564!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x38e469c93d8bda59%3A0xc1100ae12126f25a!2sSafena%20Hotel%20Skardu!5e0!3m2!1sen!2s!4v1749999999999!5m2!1sen!2s" allowfullscreen="" loading="lazy"></iframe></div>
+                </div>
+            </section>
+        </div>
+
+        <footer>
+            <div class="footer-inner">
+                <div class="footer-column"><div class="footer-logo-area"><img src="/image/logo-removebg-preview.png" class="footer-logo-img" alt="Safena Hotel Logo"><div class="footer-logo-text">SAFENA <span>HOTEL</span></div></div><p>Experience luxury and comfort in the heart of Skardu Valley. Where the Himalayas meet exceptional hospitality.</p><div class="social-links"><a href="#"><i class="fab fa-facebook-f"></i></a><a href="#"><i class="fab fa-instagram"></i></a><a href="#"><i class="fab fa-twitter"></i></a><a href="#"><i class="fab fa-youtube"></i></a><a href="https://wa.me/923103547277" target="_blank"><i class="fab fa-whatsapp"></i></a></div></div>
+                <div class="footer-column"><h4><i class="fas fa-link"></i> Quick Links</h4><a href="#home"><i class="fas fa-home"></i> Home</a><a href="#hotel-gallery"><i class="fas fa-images"></i> Gallery</a><a href="#rooms"><i class="fas fa-bed"></i> Rooms & Suites</a><a href="#facilities"><i class="fas fa-concierge-bell"></i> Facilities</a><a href="#menu-section"><i class="fas fa-utensils"></i> Menu</a><a href="#about"><i class="fas fa-info-circle"></i> About</a><a href="#contact"><i class="fas fa-phone-alt"></i> Contact</a></div>
+                <div class="footer-column"><h4><i class="fas fa-info-circle"></i> Information</h4><a class="popup-link" data-popup="privacy"><i class="fas fa-lock"></i> Privacy Policy</a><a class="popup-link" data-popup="terms"><i class="fas fa-file-contract"></i> Terms & Conditions</a><a class="popup-link" data-popup="cancellation"><i class="fas fa-ban"></i> Cancellation Policy</a><a class="popup-link" data-popup="faq"><i class="fas fa-question-circle"></i> FAQ</a><a class="popup-link" data-popup="careers"><i class="fas fa-briefcase"></i> Careers</a></div>
+                <div class="footer-column"><h4><i class="fas fa-map-marker-alt"></i> Contact Info</h4><p><i class="fas fa-location-dot"></i> 9G36+86, Skardu, Gilgit-Baltistan</p><p><i class="fas fa-phone"></i> <strong style="color:#e4ab02">0310 3547277</strong></p><p><i class="fas fa-envelope"></i> info@safenahotel.com</p><p><i class="fas fa-clock"></i> 24/7 Front Desk</p></div>
+            </div>
+            <div class="footer-bottom"><p>© 2025 SAFENA HOTEL SKARDU. All Rights Reserved. | Designed with <i class="fas fa-heart" style="color:#e4ab02"></i> in Skardu</p></div>
+        </footer>
+    </div>
+
+    <!-- Popup Modals -->
+    <div id="availabilityModal" class="popup-modal">
+        <div class="popup-content"><span class="popup-close">&times;</span><h3><i class="fas fa-calendar-check"></i> Check Availability</h3><div class="popup-field"><label>CHECK IN</label><input type="date" id="popupCheckin"></div><div class="popup-field"><label>CHECK OUT</label><input type="date" id="popupCheckout"></div><div class="popup-field"><label>GUESTS</label><select id="popupGuests"><option>1 Guest</option><option>2 Guests</option><option>3 Guests</option><option>4 Guests</option><option>5+ Guests</option></select></div><button class="popup-btn" id="popupAvailabilityBtn"><i class="fab fa-whatsapp"></i> Check on WhatsApp</button></div>
+    </div>
+
+    <div id="bookingModal" class="popup-modal">
+        <div class="popup-content"><span class="popup-close">&times;</span><h3><i class="fas fa-bed"></i> Book Your Stay</h3><div class="popup-field"><label>CHECK IN</label><input type="date" id="popupBookCheckin"></div><div class="popup-field"><label>CHECK OUT</label><input type="date" id="popupBookCheckout"></div><div class="popup-field"><label>GUESTS</label><select id="popupBookGuests"><option>1 Guest</option><option>2 Guests</option><option>3 Guests</option><option>4 Guests</option><option>5+ Guests</option></select></div><div class="popup-field"><label>ROOM TYPE</label><select id="popupRoomType"><option>All Rooms</option><option>Standard Double</option><option>Deluxe Triple</option><option>Family Quad</option><option>Executive Suite</option></select></div><button class="popup-btn" id="popupBookBtn"><i class="fab fa-whatsapp"></i> Book Now on WhatsApp</button></div>
+    </div>
+
+    <div id="infoModal" class="modal-popup">
+        <div class="modal-content"><span class="modal-close">&times;</span><div id="popupContent"></div></div>
+    </div>
+
+    <a href="https://wa.me/923103547277" target="_blank" class="whatsapp-float"><i class="fab fa-whatsapp fa-2x" style="color:white"></i></a>
+
+    <script>
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('visible'); observer.unobserve(entry.target); } });
+        }, { threshold: 0.15 });
+
+        const hotelImages = [
+            "https://lh3.googleusercontent.com/gps-cs-s/APNQkAEEhix8Fz3vyUp69oOx8UsYf5-uAuMnO_XNgCuQl-M00eqHg0N-Ho3sRJ1a588c5YYYgJfNJIP3AGYXZApu28hGXyQPwXLAnGXAusfxuEeDsL2o9ryVeH5gvFck1NPmghrRLgo4",
+            "https://lh3.googleusercontent.com/gps-cs-s/APNQkAHlJCLX9jqCiB82l4ox4-m0A2dyaU6I7dmaUOfvTvWvD0OK1We9mNES3V7IZIuVM_EfOJiQYnTKow4UXa6t_tmzQ4E2vphcDsm2IbSdhx9-GF9HUBR8f7QzqVoNVfFBoCJnubQ",
+            "https://lh3.googleusercontent.com/gps-proxy/ALd4DhG_NtCbCV02YpY8pgoJkViyDGk2TLtGrV4y7OrjTs-NIupQIQaPEhoWiLvY8QL7Gi_hA1YE_Hnpy80zJ0ScqhDnmN94Yu_HOAjxElQyJR3vRN5oE-kSSL6_tOoE245RbBtrZs6DprmcLQh24XCoULJLtx3aoqjg2CAqHS_p9kEFUJpsq5j19gSA",
+            "https://lh3.googleusercontent.com/gps-cs-s/APNQkAGu6W-IfuYEBBHVIy-dICwYpXVoyJUcgqbp7hRRScxItbvtf5WLW7c_6H8l61y8uKW0rGRCm3gUsYm4pnwctak0yIhZJbRmMl7rr0CRkt3pCpn4s43MyMMJ5YnkHm2Pc5shE7GcvQ"
+        ];
+        const galleryContainer = document.getElementById('hotelGallery');
+        hotelImages.forEach((img, idx) => { const card = document.createElement('div'); card.className = 'gallery-card'; card.style.transitionDelay = `${idx * 0.1}s`; card.innerHTML = `<div class="gallery-img"><img src="${img}" loading="lazy" onerror="this.src='https://placehold.co/600x400/e4ab02/white?text=Safena+Hotel'"></div><div class="info">Safena Hotel View</div>`; galleryContainer.appendChild(card); observer.observe(card); });
+
+        const rooms = [
+            { id: 1, name: "Standard Double", beds: 2, price: 12000, disc: 10, fac: ["Free Breakfast", "WiFi", "City View", "AC"], img: "https://lh3.googleusercontent.com/gps-cs-s/APNQkAGu6W-IfuYEBBHVIy-dICwYpXVoyJUcgqbp7hRRScxItbvtf5WLW7c_6H8l61y8uKW0rGRCm3gUsYm4pnwctak0yIhZJbRmMl7rr0CRkt3pCpn4s43MyMMJ5YnkHm2Pc5shE7GcvQ" },
+            { id: 2, name: "Deluxe Triple", beds: 3, price: 15000, disc: 12, fac: ["Breakfast", "WiFi", "TV", "Mountain View"], img: "https://lh3.googleusercontent.com/gps-cs-s/APNQkAGu6W-IfuYEBBHVIy-dICwYpXVoyJUcgqbp7hRRScxItbvtf5WLW7c_6H8l61y8uKW0rGRCm3gUsYm4pnwctak0yIhZJbRmMl7rr0CRkt3pCpn4s43MyMMJ5YnkHm2Pc5shE7GcvQ" },
+            { id: 3, name: "Family Quad", beds: 4, price: 18000, disc: 15, fac: ["Family Suite", "Fridge", "Airport Pickup", "Kids Bed"], img: "https://lh3.googleusercontent.com/gps-cs-s/APNQkAGu6W-IfuYEBBHVIy-dICwYpXVoyJUcgqbp7hRRScxItbvtf5WLW7c_6H8l61y8uKW0rGRCm3gUsYm4pnwctak0yIhZJbRmMl7rr0CRkt3pCpn4s43MyMMJ5YnkHm2Pc5shE7GcvQ" },
+            { id: 4, name: "Executive Suite", beds: 5, price: 22000, disc: 20, fac: ["Buffet Breakfast", "Living Area", "VIP Service", "Mountain Balcony"], img: "https://lh3.googleusercontent.com/gps-cs-s/APNQkAGu6W-IfuYEBBHVIy-dICwYpXVoyJUcgqbp7hRRScxItbvtf5WLW7c_6H8l61y8uKW0rGRCm3gUsYm4pnwctak0yIhZJbRmMl7rr0CRkt3pCpn4s43MyMMJ5YnkHm2Pc5shE7GcvQ" }
+        ];
+
+        function getPrice(r, dur) {
+            let nightly = r.price * (1 - r.disc / 100);
+            if (dur === 'night') return nightly;
+            if (dur === '2days') return nightly * 2 * 0.95;
+            if (dur === '3days') return nightly * 3 * 0.92;
+            if (dur === 'month') return nightly * 30 * 0.85;
+            return nightly;
+        }
+
+        let selectedDuration = {};
+        const roomsGrid = document.getElementById('roomsGrid');
+
+        function renderRooms() {
+            roomsGrid.innerHTML = '';
+            rooms.forEach((room, idx) => {
+                if (!selectedDuration[room.id]) selectedDuration[room.id] = 'night';
+                const card = document.createElement('div'); card.className = 'room-card'; card.style.transitionDelay = `${idx * 0.1}s`;
+                card.innerHTML = `<div class="room-img"><img src="${room.img}" loading="lazy"></div><div class="room-info"><h3 style="font-size:1.5rem; font-family:'Cormorant Garamond'">${room.name}</h3><div><i class="fas fa-bed"></i> ${room.beds} Beds | 🔥 ${room.disc}% off</div><div style="margin:10px 0">${room.fac.map(f => `<span style="background:#f0f0f0; padding:4px 12px; border-radius:40px; font-size:0.7rem; margin:2px; display:inline-block">${f}</span>`).join('')}</div><div style="font-size:1.8rem; font-weight:600; margin:10px 0">PKR ${Math.round(getPrice(room, selectedDuration[room.id]))}</div><div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px"><button data-id="${room.id}" data-dur="night" class="optBtn ${selectedDuration[room.id] === 'night' ? 'opt-active' : ''}">Night</button><button data-id="${room.id}" data-dur="2days" class="optBtn ${selectedDuration[room.id] === '2days' ? 'opt-active' : ''}">2 Days</button><button data-id="${room.id}" data-dur="3days" class="optBtn ${selectedDuration[room.id] === '3days' ? 'opt-active' : ''}">3 Days</button><button data-id="${room.id}" data-dur="month" class="optBtn ${selectedDuration[room.id] === 'month' ? 'opt-active' : ''}">Month</button></div><button class="bookNowDirect" data-room="${room.name}" data-price="${Math.round(getPrice(room, selectedDuration[room.id]))}" data-dur-text="${selectedDuration[room.id] === 'night' ? '1 Night' : selectedDuration[room.id] === '2days' ? '2 Days' : selectedDuration[room.id] === '3days' ? '3 Days' : '1 Month'}" style="width:100%; background:#e4ab02; color:#1a1a1a; border:none; padding:12px; border-radius:40px; font-weight:bold; cursor:pointer"><i class="fab fa-whatsapp"></i> Book Now</button></div>`;
+                roomsGrid.appendChild(card); observer.observe(card);
+            });
+            document.querySelectorAll('.optBtn').forEach(btn => btn.addEventListener('click', (e) => { const rid = parseInt(btn.dataset.id); selectedDuration[rid] = btn.dataset.dur; renderRooms(); }));
+            document.querySelectorAll('.bookNowDirect').forEach(btn => btn.addEventListener('click', () => { window.open(`https://wa.me/923103547277?text=🏨 *BOOKING REQUEST*%0A🛏️ Room: ${btn.dataset.room}%0A📆 Duration: ${btn.dataset.durText}%0A💰 Total: PKR ${btn.dataset.price}%0A📍 Safena Hotel, Skardu`, '_blank'); }));
+        }
+        renderRooms();
+
+        const facilities = [{ icon: "fa-utensils", name: "Fine Dining" }, { icon: "fa-spa", name: "Luxury Spa" }, { icon: "fa-car", name: "Airport Transfer" }, { icon: "fa-wifi", name: "High-Speed WiFi" }, { icon: "fa-dumbbell", name: "Fitness Center" }, { icon: "fa-mug-hot", name: "24/7 Cafe" }];
+        const facilitiesGrid = document.getElementById('facilitiesGrid');
+        facilities.forEach((fac, idx) => { const item = document.createElement('div'); item.className = 'facility-item'; item.style.transitionDelay = `${idx * 0.08}s`; item.innerHTML = `<i class="fas ${fac.icon}"></i><h3>${fac.name}</h3><p>Premium service</p>`; facilitiesGrid.appendChild(item); observer.observe(item); });
+
+        const attractions = [
+            { name: "Shangrila Resort", desc: "Heart-shaped lake, iconic resort", img: "/image/shangrila.jpg", distance: "25 km", time: "45 min" },
+            { name: "Satpara Lake", desc: "Crystal clear turquoise water", img: "/image/sadpara.jpg", distance: "8 km", time: "15 min" },
+            { name: "Deosai National Park", desc: "Second highest plateau", img: "image/deosai.jpg", distance: "35 km", time: "1.5 hours" },
+            { name: "Manthokha Waterfall", desc: "Majestic waterfall", img: "/image/manthokha.jpg", distance: "40 km", time: "1 hour" },
+            { name: "Cold Desert Skardu", desc: "High-altitude desert", img: "image/cold.jpg", distance: "12 km", time: "20 min" },
+            { name: "Khaplu Palace", desc: "Historic palace", img: "/image/khapluo place.jpg", distance: "103 km", time: "2.5 hours" },
+            { name: "Shigar Fort", desc: "Heritage fort", img: "image/shigar fort.jpg", distance: "30 km", time: "45 min" },
+            { name: "Blind Lake", desc: "Hidden gem", img: "image/blind lake.jpg", distance: "15 km", time: "25 min" },
+            { name: "Basho Valley", desc: "Pine forests", img: "image/basho.jpg", distance: "55 km", time: "1.5 hours" },
+            { name: "Hushe Valley", desc: "Gateway to peaks", img: "image/hushe valley.jpg", distance: "120 km", time: "3 hours" }
+        ];
+        const attractionsGrid = document.getElementById('attractionsGrid');
+        attractions.forEach((att, idx) => { const card = document.createElement('div'); card.className = 'attraction-card'; card.innerHTML = `<div class="attraction-img"><img src="${att.img}" loading="lazy"></div><div class="attraction-info"><h3><i class="fas fa-map-marker-alt"></i> ${att.name}</h3><p>${att.desc}</p><div class="distance-badge"><i class="fas fa-road"></i> ${att.distance} from hotel • ${att.time}</div></div>`; attractionsGrid.appendChild(card); });
+
+        const availabilityModal = document.getElementById('availabilityModal');
+        const bookingModal = document.getElementById('bookingModal');
+        
+        document.getElementById('showAvailabilityBtn').onclick = () => availabilityModal.classList.add('active');
+        document.getElementById('showBookingBtn').onclick = () => bookingModal.classList.add('active');
+        
+        document.querySelectorAll('.popup-close').forEach(closeBtn => {
+            closeBtn.onclick = () => {
+                availabilityModal.classList.remove('active');
+                bookingModal.classList.remove('active');
+            }
+        });
+        
+        window.onclick = (e) => {
+            if (e.target === availabilityModal) availabilityModal.classList.remove('active');
+            if (e.target === bookingModal) bookingModal.classList.remove('active');
+        }
+        
+        document.getElementById('popupAvailabilityBtn').onclick = () => {
+            const ci = document.getElementById('popupCheckin').value;
+            if (!ci) { alert("Select check-in date"); return; }
+            const co = document.getElementById('popupCheckout').value;
+            const guests = document.getElementById('popupGuests').value;
+            window.open(`https://wa.me/923103547277?text=🔍 *AVAILABILITY CHECK*%0A📅 Check-in: ${ci}%0A📅 Check-out: ${co || 'flexible'}%0A👥 Guests: ${guests}%0A📍 Safena Hotel, Skardu`, '_blank');
+            availabilityModal.classList.remove('active');
+        };
+        
+        document.getElementById('popupBookBtn').onclick = () => {
+            const ci = document.getElementById('popupBookCheckin').value;
+            if (!ci) { alert("Select check-in date"); return; }
+            const co = document.getElementById('popupBookCheckout').value;
+            const guests = document.getElementById('popupBookGuests').value;
+            const room = document.getElementById('popupRoomType').value;
+            window.open(`https://wa.me/923103547277?text=🏨 *NEW BOOKING*%0A📅 Check-in: ${ci}%0A📅 Check-out: ${co || 'flexible'}%0A👥 Guests: ${guests}%0A🛏️ Room Preference: ${room}%0A📍 Safena Hotel, Skardu`, '_blank');
+            bookingModal.classList.remove('active');
+        };
+
+        document.getElementById('emailContactForm').addEventListener('submit', (e) => { e.preventDefault(); const name = document.getElementById('contactName').value; const email = document.getElementById('contactEmail').value; const msg = document.getElementById('contactMessage').value; if (!name || !email || !msg) { alert("Fill all fields"); return; } window.open(`https://wa.me/923103547277?text=📧 *CONTACT*%0A👤 ${name}%0A📧 ${email}%0A💬 ${msg}`, '_blank'); e.target.reset(); alert("Message sent!"); });
+        document.getElementById('mobileMenu').onclick = () => document.getElementById('navLinks').classList.toggle('show');
+        document.querySelectorAll('.about-section-new, .contact-info-card, .contact-form-card, .map-wrapper, .facility-item, .room-card, .gallery-card').forEach(el => observer.observe(el));
+
+        const tabBtns = document.querySelectorAll('.menu-tab-btn');
+        const tabContents = document.querySelectorAll('.menu-tab-content');
+        tabBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const tabId = btn.getAttribute('data-tab');
+                tabBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                tabContents.forEach(content => content.classList.remove('active'));
+                document.getElementById(`tab-${tabId}`).classList.add('active');
+            });
+        });
+
+        const navbar = document.getElementById('navbar');
+        let lastScrollY = window.scrollY;
+        let ticking = false;
+        function updateNavbar() {
+            const currentScrollY = window.scrollY;
+            if (currentScrollY > lastScrollY && currentScrollY > 50) { navbar.classList.add('hide'); navbar.classList.remove('scrolled'); }
+            else if (currentScrollY < lastScrollY) { navbar.classList.remove('hide'); if (currentScrollY > 50) navbar.classList.add('scrolled'); else navbar.classList.remove('scrolled'); }
+            lastScrollY = currentScrollY; ticking = false;
+        }
+        window.addEventListener('scroll', () => { if (!ticking) { requestAnimationFrame(() => updateNavbar()); ticking = true; } });
+        updateNavbar();
+
+        const style = document.createElement('style'); style.textContent = `.opt-active{background:#e4ab02 !important;color:#1a1a1a !important}.optBtn{background:#e0e0e0;border:none;padding:6px 14px;border-radius:40px;cursor:pointer;font-size:0.8rem;transition:0.3s}.optBtn:hover{transform:scale(1.05)}`; document.head.appendChild(style);
+
+        const modal = document.getElementById('infoModal');
+        const modalClose = document.querySelector('.modal-close');
+        const popupContent = document.getElementById('popupContent');
+        const popupData = {
+            privacy: { content: `<h2>Privacy Policy</h2><p>At Safena Hotel, we take your privacy seriously...</p>` },
+            terms: { content: `<h2>Terms & Conditions</h2><p>By making a reservation at Safena Hotel...</p>` },
+            cancellation: { content: `<h2>Cancellation Policy</h2><p>Please review our cancellation policy carefully...</p>` },
+            faq: { content: `<h2>Frequently Asked Questions</h2><p>Is breakfast included? Yes...</p>` },
+            careers: { content: `<h2>Careers at Safena Hotel</h2><p>We're always looking for talented individuals...</p>` }
+        };
+        function openPopup(type) { popupContent.innerHTML = popupData[type]?.content || "<p>Content coming soon...</p>"; modal.classList.add('active'); document.body.style.overflow = 'hidden'; }
+        function closePopup() { modal.classList.remove('active'); document.body.style.overflow = ''; }
+        document.querySelectorAll('.popup-link').forEach(link => link.addEventListener('click', (e) => { e.preventDefault(); openPopup(link.getAttribute('data-popup')); }));
+        modalClose.addEventListener('click', closePopup);
+        modal.addEventListener('click', (e) => { if (e.target === modal) closePopup(); });
+        document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && modal.classList.contains('active')) closePopup(); });
+    </script>
+</body>
+
+</html>
