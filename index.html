@@ -74,6 +74,13 @@
             100% { transform: translateX(-50%); }
         }
 
+        @keyframes fade {
+            0% { opacity: 0; }
+            20% { opacity: 1; }
+            80% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+
         .float-animation {
             animation: float 4s ease-in-out infinite;
         }
@@ -544,13 +551,6 @@
             }
         }
 
-        @media (max-width: 550px) {
-            .facilities-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 1rem;
-            }
-        }
-
         .menu-section {
             margin: 4rem 0;
         }
@@ -655,31 +655,25 @@
             }
         }
 
+        /* About Section - Chota */
         .about-section-new {
             background: white;
-            border-radius: 32px;
-            padding: 2.5rem;
-            margin: 3rem 0;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-            transition: all 0.4s;
-        }
-
-        .about-section-new:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            border-radius: 24px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
         }
 
         .about-section-new p {
-            font-size: 1rem;
-            line-height: 1.8;
+            font-size: 0.95rem;
+            line-height: 1.6;
             color: #444;
-            margin-bottom: 1rem;
+            margin-bottom: 0.8rem;
         }
 
-        /* ========== ATTRACTIONS - Mobile par Marquee with HOVER STOP ========== */
+        /* Attractions - Simple (No borders/radius on mobile) */
         .nearby-section {
             background: #f0ede6;
-            border-radius: 48px;
             margin: 3rem 0;
             padding: 2rem;
         }
@@ -696,23 +690,9 @@
             animation: marqueeScroll 25s linear infinite;
         }
 
-        /* Hover par marquee stop - Desktop */
         .attractions-marquee:hover {
             animation-play-state: paused;
             cursor: pointer;
-        }
-
-        /* Touch devices ke liye (mobile) */
-        @media (hover: hover) {
-            .attractions-marquee:hover {
-                animation-play-state: paused;
-            }
-        }
-
-        @media (hover: none) {
-            .attractions-marquee:active {
-                animation-play-state: paused;
-            }
         }
 
         .attractions-marquee .attraction-card {
@@ -721,10 +701,8 @@
             vertical-align: top;
             margin-right: 1.5rem;
             width: 280px;
-            background: white;
-            border-radius: 28px;
+            background: transparent;
             overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
             transition: transform 0.3s;
         }
 
@@ -736,6 +714,7 @@
             width: 100%;
             height: 180px;
             overflow: hidden;
+            border-radius: 0;
         }
 
         .attraction-img img {
@@ -745,117 +724,146 @@
             transition: transform 0.5s;
         }
 
-        .attractions-marquee .attraction-card:hover .attraction-img img {
-            transform: scale(1.05);
-        }
-
         .attraction-info {
-            padding: 1rem;
+            padding: 0.8rem 0;
         }
 
         .attraction-info h3 {
             font-family: 'Cormorant Garamond', serif;
-            font-size: 1.2rem;
-            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+            margin-bottom: 0.3rem;
+            color: #1a1a1a;
+        }
+
+        .attraction-info p {
+            font-size: 0.8rem;
+            color: #666;
+            margin-bottom: 0.3rem;
         }
 
         .distance-badge {
             display: inline-block;
-            background: #e4ab0220;
+            background: transparent;
             color: #e4ab02;
-            padding: 4px 12px;
-            border-radius: 50px;
+            padding: 0;
             font-size: 0.7rem;
             font-weight: 600;
-            margin-top: 0.5rem;
         }
 
-        /* Desktop par normal grid */
+        /* Desktop normal grid */
         @media (min-width: 769px) {
             .attractions-marquee {
                 display: grid;
-                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-                gap: 2rem;
+                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+                gap: 1.5rem;
                 animation: none;
                 white-space: normal;
             }
             .attractions-marquee .attraction-card {
                 width: auto;
                 margin-right: 0;
+                background: transparent;
             }
             .attractions-wrapper {
                 overflow: visible;
                 white-space: normal;
             }
+            .attraction-img {
+                border-radius: 16px;
+            }
         }
 
+        /* Mobile par simple attractions (no border/radius) */
+        @media (max-width: 768px) {
+            .nearby-section {
+                background: #f0ede6;
+                padding: 1.5rem;
+                border-radius: 0;
+            }
+            .attraction-img {
+                border-radius: 0;
+            }
+            .attraction-card {
+                margin-right: 1rem;
+                width: 260px;
+            }
+        }
+
+        /* Reviews Carousel */
         .reviews-section {
-            background: linear-gradient(135deg, #1a1a1a, #2c2c2c);
-            border-radius: 60px;
             margin: 3rem 0;
-            padding: 2rem;
-            overflow: hidden;
+            padding: 0;
+            background: transparent;
         }
 
         .reviews-section .section-title {
-            color: white;
+            color: #1a1a1a;
             border-left-color: #e4ab02;
             margin-top: 0;
         }
 
-        .marquee-container {
+        .reviews-carousel {
+            position: relative;
+            max-width: 500px;
+            margin: 1.5rem auto;
             overflow: hidden;
-            white-space: nowrap;
+            min-height: 150px;
+        }
+
+        .review-slide {
+            position: absolute;
             width: 100%;
-            padding: 1rem 0;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            text-align: center;
+            padding: 1rem;
         }
 
-        .marquee-content {
-            display: inline-block;
-            animation: marqueeScroll 30s linear infinite;
-            white-space: nowrap;
+        .review-slide.active {
+            opacity: 1;
+            position: relative;
         }
 
-        .marquee-content:hover {
-            animation-play-state: paused;
-        }
-
-        .review-card-marquee {
-            display: inline-block;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 40px;
-            padding: 1.2rem 2rem;
-            margin: 0 1rem;
-            min-width: 320px;
-            white-space: normal;
-            vertical-align: middle;
-            transition: all 0.3s;
-            border: 1px solid rgba(228, 171, 2, 0.3);
-        }
-
-        .review-card-marquee:hover {
-            transform: scale(1.02);
-            border-color: #e4ab02;
-        }
-
-        .review-stars {
+        .review-simple-stars {
             color: #e4ab02;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.8rem;
+            font-size: 1rem;
         }
 
-        .review-text {
-            color: white;
-            font-size: 0.9rem;
-            line-height: 1.4;
-            max-width: 350px;
-            white-space: normal;
+        .review-simple-text {
+            font-size: 0.95rem;
+            line-height: 1.5;
+            color: #444;
+            margin-bottom: 0.8rem;
+            font-style: italic;
         }
 
-        .review-author {
+        .review-simple-author {
+            font-size: 0.8rem;
             color: #e4ab02;
             font-weight: 600;
-            margin-top: 0.5rem;
+        }
+
+        .review-dots {
+            display: flex;
+            justify-content: center;
+            gap: 0.8rem;
+            margin-top: 1rem;
+        }
+
+        .review-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #ccc;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .review-dot.active {
+            background: #e4ab02;
+            width: 25px;
+            border-radius: 10px;
         }
 
         .contact-main {
@@ -963,9 +971,7 @@
             transition: 0.4s;
             opacity: 0;
             transform: scale(0.95);
-            max-width: 800px;
-            margin-left: auto;
-            margin-right: auto;
+            width: 100%;
         }
 
         .map-wrapper.visible {
@@ -977,6 +983,15 @@
             width: 100%;
             height: 350px;
             border: none;
+        }
+
+        @media (max-width: 768px) {
+            .map-wrapper {
+                border-radius: 0;
+            }
+            .map-wrapper iframe {
+                height: 280px;
+            }
         }
 
         .whatsapp-float {
@@ -1247,38 +1262,38 @@
 
         <div class="container">
             <section id="hotel-gallery">
-                <h2 class="section-title">Hotel Gallery</h2>
+                <h2 class="section-title"><i class="fas fa-images"></i> Hotel Gallery</h2>
                 <div class="hotel-gallery" id="hotelGallery"></div>
             </section>
 
             <section id="rooms">
-                <h2 class="section-title">Our Premium Rooms</h2>
+                <h2 class="section-title"><i class="fas fa-bed"></i> Our Premium Rooms</h2>
                 <div class="rooms-grid" id="roomsGrid"></div>
             </section>
 
             <section id="facilities">
-                <h2 class="section-title">Hotel Facilities</h2>
+                <h2 class="section-title"><i class="fas fa-concierge-bell"></i> Hotel Facilities</h2>
                 <div class="facilities-grid" id="facilitiesGrid"></div>
             </section>
 
             <section id="menu-section" class="menu-section">
-                <h2 class="section-title">🍽️ Our Restaurant Menu</h2>
+                <h2 class="section-title"><i class="fas fa-utensils"></i> Our Restaurant Menu</h2>
                 <div class="menu-tabs">
-                    <button class="menu-tab-btn active" data-tab="breakfast">Breakfast</button>
-                    <button class="menu-tab-btn" data-tab="starters">Starters</button>
-                    <button class="menu-tab-btn" data-tab="pakistani">Pakistani Dishes</button>
-                    <button class="menu-tab-btn" data-tab="oriental">Oriental Dishes</button>
-                    <button class="menu-tab-btn" data-tab="extras">Extras</button>
-                    <button class="menu-tab-btn" data-tab="special">Special Orders</button>
-                    <button class="menu-tab-btn" data-tab="desserts">Desserts</button>
-                    <button class="menu-tab-btn" data-tab="drinks">Drinks</button>
+                    <button class="menu-tab-btn active" data-tab="breakfast"><i class="fas fa-mug-hot"></i> Breakfast</button>
+                    <button class="menu-tab-btn" data-tab="starters"><i class="fas fa-seedling"></i> Starters</button>
+                    <button class="menu-tab-btn" data-tab="pakistani"><i class="fas fa-drumstick-bite"></i> Pakistani</button>
+                    <button class="menu-tab-btn" data-tab="oriental"><i class="fas fa-chopsticks"></i> Oriental</button>
+                    <button class="menu-tab-btn" data-tab="extras"><i class="fas fa-plus-circle"></i> Extras</button>
+                    <button class="menu-tab-btn" data-tab="special"><i class="fas fa-star"></i> Special</button>
+                    <button class="menu-tab-btn" data-tab="desserts"><i class="fas fa-cake-candles"></i> Desserts</button>
+                    <button class="menu-tab-btn" data-tab="drinks"><i class="fas fa-martini-glass"></i> Drinks</button>
                 </div>
                 <div class="menu-tab-content active" id="tab-breakfast">
-                    <div class="menu-header"><h3><i class="fas fa-mug-hot"></i> Breakfast</h3><p class="menu-time">Served from 7:00 AM - 11:30 AM</p></div>
+                    <div class="menu-header"><h3><i class="fas fa-mug-hot"></i> Breakfast</h3><p class="menu-time"><i class="fas fa-clock"></i> Served from 7:00 AM - 11:30 AM</p></div>
                     <div class="menu-items"><div class="menu-item"><span class="item-name">Paratha</span><span class="item-price">$5.00</span></div><div class="menu-item"><span class="item-name">Aloo Paratha</span><span class="item-price">$7.00</span></div><div class="menu-item"><span class="item-name">Egg Fry</span><span class="item-price">$6.50</span></div><div class="menu-item"><span class="item-name">Omelette</span><span class="item-price">$4.00</span></div><div class="menu-item"><span class="item-name">Boiled Egg</span><span class="item-price">$5.50</span></div><div class="menu-item"><span class="item-name">French Toast</span><span class="item-price">$5.00</span></div><div class="menu-item"><span class="item-name">Toast (4 Pc)</span><span class="item-price">$7.00</span></div><div class="menu-item"><span class="item-name">Lahori Channay</span><span class="item-price">$6.50</span></div><div class="menu-item"><span class="item-name">Aloo Bhujia</span><span class="item-price">$4.00</span></div><div class="menu-item"><span class="item-name">Aloo Tikki</span><span class="item-price">$5.50</span></div></div>
                 </div>
                 <div class="menu-tab-content" id="tab-starters">
-                    <div class="menu-header"><h3><i class="fas fa-utensils"></i> Starters</h3></div>
+                    <div class="menu-header"><h3><i class="fas fa-seedling"></i> Starters</h3></div>
                     <div class="menu-items"><div class="menu-item"><span class="item-name">French Fries</span><span class="item-price">$5.00</span></div><div class="menu-item"><span class="item-name">Pakoray</span><span class="item-price">$7.00</span></div><div class="menu-item"><span class="item-name">Chicken Boti</span><span class="item-price">$5.00</span></div><div class="menu-item"><span class="item-name">Malai Boti</span><span class="item-price">$7.00</span></div><div class="menu-item"><span class="item-name">Seekh Kebab</span><span class="item-price">$5.00</span></div><div class="menu-item"><span class="item-name">Chicken Roast</span><span class="item-price">$7.00</span></div><div class="menu-item"><span class="item-name">Chicken and Corn Soup</span><span class="item-price">$5.00</span></div><div class="menu-item"><span class="item-name">Hot and Sour Soup</span><span class="item-price">$7.00</span></div><div class="menu-item"><span class="item-name">Special Soup</span><span class="item-price">$5.00</span></div><div class="menu-item"><span class="item-name">Vegetable Soup</span><span class="item-price">$7.00</span></div></div>
                 </div>
                 <div class="menu-tab-content" id="tab-pakistani">
@@ -1302,39 +1317,58 @@
                     <div class="menu-items"><div class="menu-item"><span class="item-name">Kheer</span><span class="item-price">$5.00</span></div><div class="menu-item"><span class="item-name">Custard</span><span class="item-price">$7.00</span></div><div class="menu-item"><span class="item-name">Shahi Tukray</span><span class="item-price">$5.00</span></div></div>
                 </div>
                 <div class="menu-tab-content" id="tab-drinks">
-                    <div class="menu-header"><h3><i class="fas fa-glass-cheers"></i> Drinks</h3></div>
+                    <div class="menu-header"><h3><i class="fas fa-martini-glass"></i> Drinks</h3></div>
                     <div class="menu-items"><div class="menu-item"><span class="item-name">Mineral Water (Large)</span><span class="item-price">$5.00</span></div><div class="menu-item"><span class="item-name">Mineral Water (Small)</span><span class="item-price">$5.00</span></div><div class="menu-item"><span class="item-name">Green Tea</span><span class="item-price">$5.00</span></div><div class="menu-item"><span class="item-name">English Tea</span><span class="item-price">$7.00</span></div><div class="menu-item"><span class="item-name">Doodh Pathi</span><span class="item-price">$5.00</span></div><div class="menu-item"><span class="item-name">Black Coffee</span><span class="item-price">$7.00</span></div><div class="menu-item"><span class="item-name">Soft Drink Can</span><span class="item-price">$5.00</span></div><div class="menu-item"><span class="item-name">Milkshake (Seasonal)</span><span class="item-price">$5.00</span></div><div class="menu-item"><span class="item-name">Soft Drink (1.5 Litre)</span><span class="item-price">$7.00</span></div></div>
                 </div>
             </section>
 
+            <!-- About Section -->
             <section id="about">
-                <h2 class="section-title">About Safena Hotel</h2>
+                <h2 class="section-title"><i class="fas fa-info-circle"></i> About Safena Hotel</h2>
                 <div class="about-section-new">
-                    <p>Nestled in the heart of <strong>Skardu Valley, Safena Hotel</strong> offers a perfect blend of comfort, elegance, and warm Balti hospitality. With a stellar 4.7 rating from 57+ reviews, we take pride in providing an unforgettable stay experience. Overlooking the majestic Karakoram Range, we offer modern amenities, delicious cuisine, and breathtaking mountain views.</p>
-                    <p>Conveniently located in Skardu city center, we are your gateway to the stunning landscapes of Gilgit-Baltistan. Whether you're here for adventure or relaxation, Safena Hotel ensures a memorable stay.</p>
+                    <p>Nestled in the heart of <strong>Skardu Valley, Safena Hotel</strong> offers a perfect blend of comfort, elegance, and warm Balti hospitality. With a stellar 4.7 rating from 57+ reviews, we take pride in providing an unforgettable stay experience.</p>
+                    <p>Conveniently located in Skardu city center, we are your gateway to the stunning landscapes of Gilgit-Baltistan.</p>
                 </div>
             </section>
 
+            <!-- Attractions - Simple -->
             <section id="nearby-attractions" class="nearby-section">
-                <h2 class="section-title">📍 Nearby Attractions (Top 10 Places)</h2>
+                <h2 class="section-title"><i class="fas fa-map-marked-alt"></i> Nearby Attractions (Top 10 Places)</h2>
                 <div class="attractions-wrapper">
                     <div class="attractions-marquee" id="attractionsGrid"></div>
                 </div>
             </section>
 
+            <!-- Reviews Carousel -->
             <section id="reviews" class="reviews-section">
-                <h2 class="section-title">⭐ What Our Guests Say (4.7 ★ - 57+ Reviews)</h2>
-                <div class="marquee-container">
-                    <div class="marquee-content" id="reviewsMarquee">
-                        <div class="review-card-marquee"><div class="review-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><div class="review-text">"Excellent service and clean rooms! The staff was very friendly."</div><div class="review-author">— Muhammad Ali</div></div>
-                        <div class="review-card-marquee"><div class="review-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><div class="review-text">"Best location in Skardu! Spacious rooms and delicious food."</div><div class="review-author">— Ayesha Khan</div></div>
-                        <div class="review-card-marquee"><div class="review-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><div class="review-text">"Great value for money. Spectacular mountain views!"</div><div class="review-author">— Imran Shah</div></div>
+                <h2 class="section-title"><i class="fas fa-star"></i> What Our Guests Say About Us</h2>
+                <div class="reviews-carousel" id="reviewsCarousel">
+                    <div class="review-slide active">
+                        <div class="review-simple-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                        <div class="review-simple-text">"Excellent service and clean rooms! The staff was very friendly and helpful throughout our stay."</div>
+                        <div class="review-simple-author">— Muhammad Ali</div>
                     </div>
+                    <div class="review-slide">
+                        <div class="review-simple-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                        <div class="review-simple-text">"Best location in Skardu! Spacious rooms and delicious food. Highly recommended!"</div>
+                        <div class="review-simple-author">— Ayesha Khan</div>
+                    </div>
+                    <div class="review-slide">
+                        <div class="review-simple-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                        <div class="review-simple-text">"Great value for money. Spectacular mountain views from the room!"</div>
+                        <div class="review-simple-author">— Imran Shah</div>
+                    </div>
+                </div>
+                <div class="review-dots" id="reviewDots">
+                    <span class="review-dot active"></span>
+                    <span class="review-dot"></span>
+                    <span class="review-dot"></span>
                 </div>
             </section>
 
+            <!-- Contact Section -->
             <section id="contact">
-                <h2 class="section-title">Get in Touch</h2>
+                <h2 class="section-title"><i class="fas fa-address-card"></i> Get in Touch</h2>
                 <div class="contact-main">
                     <div class="contact-two-columns">
                         <div class="contact-info-card">
@@ -1359,9 +1393,9 @@
         <footer>
             <div class="footer-inner">
                 <div class="footer-column"><div class="footer-logo-area"><img src="/image/logo-removebg-preview.png" class="footer-logo-img" alt="Safena Hotel Logo"><div class="footer-logo-text">SAFENA <span>HOTEL</span></div></div><p>Experience luxury and comfort in the heart of Skardu Valley. Where the Himalayas meet exceptional hospitality.</p><div class="social-links"><a href="#"><i class="fab fa-facebook-f"></i></a><a href="#"><i class="fab fa-instagram"></i></a><a href="#"><i class="fab fa-twitter"></i></a><a href="#"><i class="fab fa-youtube"></i></a><a href="https://wa.me/923103547277" target="_blank"><i class="fab fa-whatsapp"></i></a></div></div>
-                <div class="footer-column"><h4><i class="fas fa-link"></i> Quick Links</h4><a href="#home"><i class="fas fa-home"></i> Home</a><a href="#hotel-gallery"><i class="fas fa-images"></i> Gallery</a><a href="#rooms"><i class="fas fa-bed"></i> Rooms & Suites</a><a href="#facilities"><i class="fas fa-concierge-bell"></i> Facilities</a><a href="#menu-section"><i class="fas fa-utensils"></i> Menu</a><a href="#about"><i class="fas fa-info-circle"></i> About</a><a href="#contact"><i class="fas fa-phone-alt"></i> Contact</a></div>
+                <div class="footer-column"><h4><i class="fas fa-link"></i> Quick Links</h4><a href="#home"><i class="fas fa-home"></i> Home</a><a href="#hotel-gallery"><i class="fas fa-images"></i> Gallery</a><a href="#rooms"><i class="fas fa-bed"></i> Rooms</a><a href="#facilities"><i class="fas fa-concierge-bell"></i> Facilities</a><a href="#menu-section"><i class="fas fa-utensils"></i> Menu</a><a href="#about"><i class="fas fa-info-circle"></i> About</a><a href="#contact"><i class="fas fa-phone-alt"></i> Contact</a></div>
                 <div class="footer-column"><h4><i class="fas fa-info-circle"></i> Information</h4><a class="popup-link" data-popup="privacy"><i class="fas fa-lock"></i> Privacy Policy</a><a class="popup-link" data-popup="terms"><i class="fas fa-file-contract"></i> Terms & Conditions</a><a class="popup-link" data-popup="cancellation"><i class="fas fa-ban"></i> Cancellation Policy</a><a class="popup-link" data-popup="faq"><i class="fas fa-question-circle"></i> FAQ</a><a class="popup-link" data-popup="careers"><i class="fas fa-briefcase"></i> Careers</a></div>
-                <div class="footer-column"><h4><i class="fas fa-map-marker-alt"></i> Contact Info</h4><p><i class="fas fa-location-dot"></i> 9G36+86, Skardu, Gilgit-Baltistan</p><p><i class="fas fa-phone"></i> <strong style="color:#e4ab02">0310 3547277</strong></p><p><i class="fas fa-envelope"></i> info@safenahotel.com</p><p><i class="fas fa-clock"></i> 24/7 Front Desk</p></div>
+                <div class="footer-column"><h4><i class="fas fa-map-marker-alt"></i> Contact Info</h4><p><i class="fas fa-location-dot"></i> 9G36+86, Skardu</p><p><i class="fas fa-phone"></i> 0310 3547277</p><p><i class="fas fa-envelope"></i> info@safenahotel.com</p><p><i class="fas fa-clock"></i> 24/7 Front Desk</p></div>
             </div>
             <div class="footer-bottom"><p>© 2025 SAFENA HOTEL SKARDU. All Rights Reserved. | Designed with <i class="fas fa-heart" style="color:#e4ab02"></i> in Skardu</p></div>
         </footer>
@@ -1394,7 +1428,7 @@
             "https://lh3.googleusercontent.com/gps-cs-s/APNQkAGu6W-IfuYEBBHVIy-dICwYpXVoyJUcgqbp7hRRScxItbvtf5WLW7c_6H8l61y8uKW0rGRCm3gUsYm4pnwctak0yIhZJbRmMl7rr0CRkt3pCpn4s43MyMMJ5YnkHm2Pc5shE7GcvQ"
         ];
         const galleryContainer = document.getElementById('hotelGallery');
-        hotelImages.forEach((img, idx) => { const card = document.createElement('div'); card.className = 'gallery-card'; card.style.transitionDelay = `${idx * 0.1}s`; card.innerHTML = `<div class="gallery-img"><img src="${img}" loading="lazy" onerror="this.src='https://placehold.co/600x400/e4ab02/white?text=Safena+Hotel'"></div><div class="info">Safena Hotel View</div>`; galleryContainer.appendChild(card); observer.observe(card); });
+        hotelImages.forEach((img, idx) => { const card = document.createElement('div'); card.className = 'gallery-card'; card.style.transitionDelay = `${idx * 0.1}s`; card.innerHTML = `<div class="gallery-img"><img src="${img}" loading="lazy" onerror="this.src='https://placehold.co/600x400/e4ab02/white?text=Safena+Hotel'"></div><div class="info"><i class="fas fa-camera"></i> Safena Hotel View</div>`; galleryContainer.appendChild(card); observer.observe(card); });
 
         const rooms = [
             { id: 1, name: "Standard Double", beds: 2, price: 12000, disc: 10, fac: ["Free Breakfast", "WiFi", "City View", "AC"], img: "https://lh3.googleusercontent.com/gps-cs-s/APNQkAGu6W-IfuYEBBHVIy-dICwYpXVoyJUcgqbp7hRRScxItbvtf5WLW7c_6H8l61y8uKW0rGRCm3gUsYm4pnwctak0yIhZJbRmMl7rr0CRkt3pCpn4s43MyMMJ5YnkHm2Pc5shE7GcvQ" },
@@ -1420,7 +1454,7 @@
             rooms.forEach((room, idx) => {
                 if (!selectedDuration[room.id]) selectedDuration[room.id] = 'night';
                 const card = document.createElement('div'); card.className = 'room-card'; card.style.transitionDelay = `${idx * 0.1}s`;
-                card.innerHTML = `<div class="room-img"><img src="${room.img}" loading="lazy"></div><div class="room-info"><h3 style="font-size:1.5rem; font-family:'Cormorant Garamond'">${room.name}</h3><div><i class="fas fa-bed"></i> ${room.beds} Beds | 🔥 ${room.disc}% off</div><div style="margin:10px 0">${room.fac.map(f => `<span style="background:#f0f0f0; padding:4px 12px; border-radius:40px; font-size:0.7rem; margin:2px; display:inline-block">${f}</span>`).join('')}</div><div style="font-size:1.8rem; font-weight:600; margin:10px 0">PKR ${Math.round(getPrice(room, selectedDuration[room.id]))}</div><div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px"><button data-id="${room.id}" data-dur="night" class="optBtn ${selectedDuration[room.id] === 'night' ? 'opt-active' : ''}">Night</button><button data-id="${room.id}" data-dur="2days" class="optBtn ${selectedDuration[room.id] === '2days' ? 'opt-active' : ''}">2 Days</button><button data-id="${room.id}" data-dur="3days" class="optBtn ${selectedDuration[room.id] === '3days' ? 'opt-active' : ''}">3 Days</button><button data-id="${room.id}" data-dur="month" class="optBtn ${selectedDuration[room.id] === 'month' ? 'opt-active' : ''}">Month</button></div><button class="bookNowDirect" data-room="${room.name}" data-price="${Math.round(getPrice(room, selectedDuration[room.id]))}" data-dur-text="${selectedDuration[room.id] === 'night' ? '1 Night' : selectedDuration[room.id] === '2days' ? '2 Days' : selectedDuration[room.id] === '3days' ? '3 Days' : '1 Month'}" style="width:100%; background:#e4ab02; color:#1a1a1a; border:none; padding:12px; border-radius:40px; font-weight:bold; cursor:pointer"><i class="fab fa-whatsapp"></i> Book Now</button></div>`;
+                card.innerHTML = `<div class="room-img"><img src="${room.img}" loading="lazy"></div><div class="room-info"><h3 style="font-size:1.5rem; font-family:'Cormorant Garamond'">${room.name}</h3><div><i class="fas fa-bed"></i> ${room.beds} Beds | <i class="fas fa-fire"></i> ${room.disc}% off</div><div style="margin:10px 0">${room.fac.map(f => `<span style="background:#f0f0f0; padding:4px 12px; border-radius:40px; font-size:0.7rem; margin:2px; display:inline-block"><i class="fas fa-check"></i> ${f}</span>`).join('')}</div><div style="font-size:1.8rem; font-weight:600; margin:10px 0"><i class="fas fa-rupee-sign"></i> ${Math.round(getPrice(room, selectedDuration[room.id]))}</div><div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px"><button data-id="${room.id}" data-dur="night" class="optBtn ${selectedDuration[room.id] === 'night' ? 'opt-active' : ''}"><i class="fas fa-moon"></i> Night</button><button data-id="${room.id}" data-dur="2days" class="optBtn ${selectedDuration[room.id] === '2days' ? 'opt-active' : ''}"><i class="fas fa-calendar-day"></i> 2 Days</button><button data-id="${room.id}" data-dur="3days" class="optBtn ${selectedDuration[room.id] === '3days' ? 'opt-active' : ''}"><i class="fas fa-calendar-week"></i> 3 Days</button><button data-id="${room.id}" data-dur="month" class="optBtn ${selectedDuration[room.id] === 'month' ? 'opt-active' : ''}"><i class="fas fa-calendar-alt"></i> Month</button></div><button class="bookNowDirect" data-room="${room.name}" data-price="${Math.round(getPrice(room, selectedDuration[room.id]))}" data-dur-text="${selectedDuration[room.id] === 'night' ? '1 Night' : selectedDuration[room.id] === '2days' ? '2 Days' : selectedDuration[room.id] === '3days' ? '3 Days' : '1 Month'}" style="width:100%; background:#e4ab02; color:#1a1a1a; border:none; padding:12px; border-radius:40px; font-weight:bold; cursor:pointer"><i class="fab fa-whatsapp"></i> Book Now</button></div>`;
                 roomsGrid.appendChild(card); observer.observe(card);
             });
             document.querySelectorAll('.optBtn').forEach(btn => btn.addEventListener('click', (e) => { const rid = parseInt(btn.dataset.id); selectedDuration[rid] = btn.dataset.dur; renderRooms(); }));
@@ -1430,7 +1464,7 @@
 
         const facilities = [{ icon: "fa-utensils", name: "Fine Dining" }, { icon: "fa-spa", name: "Luxury Spa" }, { icon: "fa-car", name: "Airport Transfer" }, { icon: "fa-wifi", name: "High-Speed WiFi" }, { icon: "fa-dumbbell", name: "Fitness Center" }, { icon: "fa-mug-hot", name: "24/7 Cafe" }];
         const facilitiesGrid = document.getElementById('facilitiesGrid');
-        facilities.forEach((fac, idx) => { const item = document.createElement('div'); item.className = 'facility-item'; item.style.transitionDelay = `${idx * 0.08}s`; item.innerHTML = `<i class="fas ${fac.icon}"></i><h3>${fac.name}</h3><p>Premium service</p>`; facilitiesGrid.appendChild(item); observer.observe(item); });
+        facilities.forEach((fac, idx) => { const item = document.createElement('div'); item.className = 'facility-item'; item.style.transitionDelay = `${idx * 0.08}s`; item.innerHTML = `<i class="fas ${fac.icon}"></i><h3>${fac.name}</h3><p><i class="fas fa-star"></i> Premium service</p>`; facilitiesGrid.appendChild(item); observer.observe(item); });
 
         const attractions = [
             { name: "Shangrila Resort", desc: "Heart-shaped lake, iconic resort", img: "/image/shangrila.jpg", distance: "25 km", time: "45 min" },
@@ -1446,6 +1480,34 @@
         ];
         const attractionsGrid = document.getElementById('attractionsGrid');
         attractions.forEach((att, idx) => { const card = document.createElement('div'); card.className = 'attraction-card'; card.innerHTML = `<div class="attraction-img"><img src="${att.img}" loading="lazy"></div><div class="attraction-info"><h3><i class="fas fa-map-marker-alt"></i> ${att.name}</h3><p>${att.desc}</p><div class="distance-badge"><i class="fas fa-road"></i> ${att.distance} from hotel • ${att.time}</div></div>`; attractionsGrid.appendChild(card); });
+
+        // Reviews Carousel
+        let currentReview = 0;
+        const reviews = document.querySelectorAll('.review-slide');
+        const dots = document.querySelectorAll('.review-dot');
+        
+        function showReview(index) {
+            reviews.forEach((review, i) => {
+                review.classList.toggle('active', i === index);
+            });
+            dots.forEach((dot, i) => {
+                dot.classList.toggle('active', i === index);
+            });
+        }
+        
+        function nextReview() {
+            currentReview = (currentReview + 1) % reviews.length;
+            showReview(currentReview);
+        }
+        
+        dots.forEach((dot, index) => {
+            dot.addEventListener('click', () => {
+                currentReview = index;
+                showReview(currentReview);
+            });
+        });
+        
+        setInterval(nextReview, 4000);
 
         const availabilityModal = document.getElementById('availabilityModal');
         const bookingModal = document.getElementById('bookingModal');
@@ -1518,11 +1580,11 @@
         const modalClose = document.querySelector('.modal-close');
         const popupContent = document.getElementById('popupContent');
         const popupData = {
-            privacy: { content: `<h2>Privacy Policy</h2><p>At Safena Hotel, we take your privacy seriously...</p>` },
-            terms: { content: `<h2>Terms & Conditions</h2><p>By making a reservation at Safena Hotel...</p>` },
-            cancellation: { content: `<h2>Cancellation Policy</h2><p>Please review our cancellation policy carefully...</p>` },
-            faq: { content: `<h2>Frequently Asked Questions</h2><p>Is breakfast included? Yes...</p>` },
-            careers: { content: `<h2>Careers at Safena Hotel</h2><p>We're always looking for talented individuals...</p>` }
+            privacy: { content: `<h2><i class="fas fa-lock"></i> Privacy Policy</h2><p>At Safena Hotel, we take your privacy seriously...</p>` },
+            terms: { content: `<h2><i class="fas fa-file-contract"></i> Terms & Conditions</h2><p>By making a reservation at Safena Hotel...</p>` },
+            cancellation: { content: `<h2><i class="fas fa-ban"></i> Cancellation Policy</h2><p>Please review our cancellation policy carefully...</p>` },
+            faq: { content: `<h2><i class="fas fa-question-circle"></i> Frequently Asked Questions</h2><p>Is breakfast included? Yes...</p>` },
+            careers: { content: `<h2><i class="fas fa-briefcase"></i> Careers at Safena Hotel</h2><p>We're always looking for talented individuals...</p>` }
         };
         function openPopup(type) { popupContent.innerHTML = popupData[type]?.content || "<p>Content coming soon...</p>"; modal.classList.add('active'); document.body.style.overflow = 'hidden'; }
         function closePopup() { modal.classList.remove('active'); document.body.style.overflow = ''; }
